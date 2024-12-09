@@ -1,11 +1,43 @@
 import CareerAdvice from "../pages/CareerAdvice";
 import CarrerDevelopmentCourses from "./CarrerDevelopmentCourses";
-
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 export default function WorkLife() {
-  return (  
+  const [contentData, setContentData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch content API data
+  useEffect(() => {
+    const fetchContentData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/content?category=Work Life"
+        );
+        setContentData(response.data); // Directly set the response data
+      } catch (err) {
+        console.error("Error fetching content data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContentData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data: {error}</div>;
+
+  // Extract title and contents from contentData
+  const { title, contents } = contentData;
+  return (
     <div>
-       <CareerAdvice title="Work life" description="Now that you’ve landed the job, what should you be prepared for? Covering all aspects of daily working life, we’ve got advice on how to get along with and bond with your colleagues, what your outfit says about you in the workplace and how to deal with your boss (especially if they’re a handful!) With tips on how to make the most of your working day, and advice on how to budget your salary, we’ve got everything you need to make the transition to your new job as smooth as possible." />
-       <CarrerDevelopmentCourses />
+      <CareerAdvice
+        title={title} // Use dynamic title from API
+        description={contents} // Use dynamic contents from API
+      />
+      <CarrerDevelopmentCourses />
     </div>
   );
 }

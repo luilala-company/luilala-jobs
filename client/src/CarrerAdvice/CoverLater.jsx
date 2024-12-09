@@ -1,14 +1,45 @@
 import CareerAdvice from "../pages/CareerAdvice";
 import CarrerDevelopmentCourses from "./CarrerDevelopmentCourses";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 export default function CoverLater() {
-  return (  
+  const [contentData, setContentData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch content API data
+  useEffect(() => {
+    const fetchContentData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/content?category=Cover Letter"
+        );
+        setContentData(response.data); // Directly set the response data
+      } catch (err) {
+        console.error("Error fetching content data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContentData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data: {error}</div>;
+
+  // Extract title and contents from contentData
+  const { title, contents } = contentData;
+
+  return (
     <div>
-   <CareerAdvice title="Cover letters" description="Perfecting your cover letter is just as important as getting your CV right! With our complete guide to writing a cover letter and our variety of templates, you’ll never have to worry about getting it right again. Whether you choose to send your cover letter by email, opt for the more traditional hand-written method, or want to know how to send the perfect message on LinkedIn, we’ve got everything you need to know. We’re committed to helping you get the most from your career, whether it’s your first job or you’re heading down a new career path.." />
-   <CarrerDevelopmentCourses />
-   
-   
-   
+      <CareerAdvice
+        title={title} // Use dynamic title from API
+        description={contents} // Use dynamic contents from API
+      />
+      <CarrerDevelopmentCourses />
     </div>
   );
 }

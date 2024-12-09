@@ -1,64 +1,89 @@
 import CareerAdvice from "../pages/CareerAdvice";
 import CarrerHomeCourses from "./CaarrerHomeCourses";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 export default function HomeAdvice() {
+  // ....... Title , Image Api Integration START .........
+  const [data, setData] = useState([]);
+  const [contentData, setContentData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch title and image API data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/imageandtitle?category=Home"
+        );
+        setData(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Fetch content API data
+  useEffect(() => {
+    const fetchContentData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/content?category=Home"
+        );
+        setContentData(response.data); // Directly set the response data
+      } catch (err) {
+        console.error("Error fetching content data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContentData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data: {error}</div>;
+
+  // Extract title and contents from contentData
+  const { title, contents } = contentData;
+
   return (
     <>
       <div>
         <CareerAdvice
-          title="Career Advice"
-          description="Our advice centre contains articles with helpful tips, how-to guides and CV templates. Written by career experts, were committed to helping your job search and ensuring you get the most from your career."
+          title={title} // Use dynamic title from API
+          description={contents} // Use dynamic contents from API
         />
 
-        <div className=" flex flex-col md:flex-row  container gap-8">
-          {/* <!-- first --> */}
-          <div className="first-adivce-card relative">
-            <img
-              src="https://media.istockphoto.com/id/1497199031/photo/portrait-of-mechanical-engineers-are-checking-the-working-condition-of-an-old-machine-that.jpg?s=612x612&w=0&k=20&c=MHIeLccBnJESugiT1UNo9Mw4nZpFdeF7lZTmYntkkU4="
-            />
-            <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-              <span className="text-md font-medium">By content team</span>
-              <a href="#" className="block text-2xl mt-3 font-bold hover:underline">
-                Your guide to apprenticeships in 2024
-              </a>
-            </div>
-          </div>
-
-          {/* <!-- second --> */}
-          <div className="two_image grid grid-cols-1 sm:grid-cols-2 gap-8">
-           
-            <div className="relative">
+        {/* Second Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {data.slice(0, 3).map((article) => (
+            <div className="relative bg-white shadow-lg rounded-lg overflow-hidden">
               <img
-                src="https://media.istockphoto.com/id/2005694683/photo/checking-and-inspecting-metal-machine-part-items-for-shipping-male-and-woman-worker-checking.jpg?s=612x612&w=0&k=20&c=8vwEqA8abT5mF7-mS55b_eNeJYmfPriMjLEf_hF0qRQ="
-                alt=""
+                src={`${article.authorId.image}`} // Adjust the image URL as needed
+                alt="Image isn't found!"
                 className="w-full h-64 object-cover"
               />
-              <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-                <span className="text-sm font-medium">By content team</span>
-                <a href="#" className="block text-lg font-bold hover:underline">
-                  Your guide to apprenticeships in 2024
+              <div className="p-4">
+                <span className="text-md font-medium">By Content Team</span>{" "}
+                {/* Update if you have an author name */}
+                <a
+                  href="#"
+                  className="block text-xl mt-2 font-bold hover:underline"
+                >
+                  {article.title}
                 </a>
               </div>
             </div>
-
-            <div className="relative">
-              <img
-                src="https://media.istockphoto.com/id/1198042412/photo/male-supervisor-at-a-manufacturing-factory-talking-to-female-employee-at-the-production-line.jpg?s=612x612&w=0&k=20&c=xboPES80NaevEF8IrpTKT48aGjVsAqTj1t-QMlFPCXo="
-                alt=""
-                className="w-full h-64 object-cover"
-              />
-              <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-                <span className="text-sm font-medium">By content team</span>
-                <a href="#" className="block text-lg font-bold hover:underline">
-                  Your guide to apprenticeships in 2024
-                </a>
-              </div>
-            </div>
-
-          </div>
+          ))}
         </div>
- 
       </div>
+
       <CarrerHomeCourses />
     </>
   );

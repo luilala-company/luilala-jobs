@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import TabsComponentCompany from './TabsComponentCompany';
-import FuturedCompanys from '../components/FuturedCompanys';
-import CompanyCourse from '../components/CompanyCourses';
-import Industries from '../components/Industries';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import TabsComponentCompany from "./TabsComponentCompany";
+import FuturedCompanys from "../components/FuturedCompanys";
+import CompanyCourse from "../components/CompanyCourses";
+import Industries from "../components/Industries";
 
 export default function Company() {
-  const [activeTab, setActiveTab] = useState('employee');
-  const [searchQuery, setSearchQuery] = useState('');
+  // ............. Serching Campany  Start................
+  // ............. Serching Campany  END..................
+  const [activeTab, setActiveTab] = useState("employee");
+  const [searchQuery, setSearchQuery] = useState("");
   const [liveJobs, setLiveJobs] = useState(0);
   const [employers, setEmployers] = useState(0);
 
@@ -15,8 +17,8 @@ export default function Company() {
     const fetchData = async () => {
       try {
         const [liveJobs, employers] = await Promise.all([
-          axios.get('http://127.0.0.1:3000/api/v1/job/liveJobsLength'),
-          axios.get('http://127.0.0.1:3000/api/v1/job/companyLength'),
+          axios.get("http://127.0.0.1:3000/api/v1/job/liveJobsLength"),
+          axios.get("http://127.0.0.1:3000/api/v1/job/companyLength"),
         ]);
 
         setLiveJobs(liveJobs.data);
@@ -32,7 +34,7 @@ export default function Company() {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const handleSearch = (event) => {
@@ -40,26 +42,26 @@ export default function Company() {
   };
 
   const companyList = [
-    { id: 1, name: 'ABC Company' },
-    { id: 2, name: 'XYZ Inc.' },
-    { id: 3, name: 'Acme Corporation' },
-    { id: 4, name: 'Omega Solutions' },
-    { id: 5, name: 'Delta Industries' },
-    { id: 6, name: 'Gamma Enterprises' },
-    { id: 7, name: 'Sigma Technologies' },
-    { id: 8, name: 'Theta Group' },
-    { id: 9, name: 'Iota Innovations' },
-    { id: 10, name: 'Fappa Designs' },
-    { id: 11, name: 'Lappa Designs' },
-    { id: 12, name: 'Zappa Designs' },
-    { id: 13, name: 'Tappa Designs' },
-    { id: 14, name: 'Mappa Designs' },
-    { id: 15, name: 'Nappa Designs' },
-    { id: 16, name: 'Cappa Designs' },
-    { id: 17, name: 'Qappa Designs' },
-    { id: 18, name: 'Zappa Designs' },
-    { id: 19, name: 'Xappa Designs' },
-    { id: 20, name: 'Pappa Designs' },
+    { id: 1, name: "ABC Company" },
+    { id: 2, name: "XYZ Inc." },
+    { id: 3, name: "Acme Corporation" },
+    { id: 4, name: "Omega Solutions" },
+    { id: 5, name: "Delta Industries" },
+    { id: 6, name: "Gamma Enterprises" },
+    { id: 7, name: "Sigma Technologies" },
+    { id: 8, name: "Theta Group" },
+    { id: 9, name: "Iota Innovations" },
+    { id: 10, name: "Fappa Designs" },
+    { id: 11, name: "Lappa Designs" },
+    { id: 12, name: "Zappa Designs" },
+    { id: 13, name: "Tappa Designs" },
+    { id: 14, name: "Mappa Designs" },
+    { id: 15, name: "Nappa Designs" },
+    { id: 16, name: "Cappa Designs" },
+    { id: 17, name: "Qappa Designs" },
+    { id: 18, name: "Zappa Designs" },
+    { id: 19, name: "Xappa Designs" },
+    { id: 20, name: "Pappa Designs" },
   ];
 
   const filteredCompanies = companyList.filter((company) =>
@@ -90,27 +92,27 @@ export default function Company() {
         <ul className="flex border-b border-gray-300">
           <li
             className={`cursor-pointer px-4 py-2 rounded-t-lg ${
-              activeTab === 'employee'
-                ? 'bg-gradient-to-r from-[#002244] to-[#4682B4] text-white'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              activeTab === "employee"
+                ? "bg-gradient-to-r from-[#002244] to-[#4682B4] text-white"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
-            onClick={() => handleTabClick('employee')}
+            onClick={() => handleTabClick("employee")}
           >
             <h3 className="text-lg font-medium">Search Employee</h3>
           </li>
           <li
             className={`cursor-pointer px-4 py-2 rounded-t-lg ${
-              activeTab === 'agency'
-                ? 'bg-gradient-to-r from-[#002244] to-[#4682B4] text-white'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              activeTab === "agency"
+                ? "bg-gradient-to-r from-[#002244] to-[#4682B4] text-white"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
-            onClick={() => handleTabClick('agency')}
+            onClick={() => handleTabClick("agency")}
           >
             <h3 className="text-lg font-medium">Search Recruitment Agencies</h3>
           </li>
         </ul>
         <div className="mt-6">
-          {activeTab === 'employee' && (
+          {activeTab === "employee" && (
             <div className="contents">
               <div className="relative">
                 <input
@@ -155,7 +157,7 @@ export default function Company() {
               </div>
             </div>
           )}
-          {activeTab === 'agency' && (
+          {activeTab === "agency" && (
             <div className="contents">
               <div className="relative">
                 <input
